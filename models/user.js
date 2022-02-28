@@ -30,29 +30,19 @@ const userSchema = new Schema({
                 itemId: {
                     type: Schema.Types.ObjectId,
                     ref: "Item",
-                },
-                quantity: { type: Number, required: true },
+                }
             },
         ],
     },
 })
 
 userSchema.methods.addToCart = function (item) {
-    const cartItemIndex = this.cart.items.findIndex((cp) => {
-        return cp.itemId.toString() === item._id.toString();
-    });
-    let newQuantity = 1;
+
     const updatedCartItems = [...this.cart.items];
 
-    if (cartItemIndex >= 0) {
-        newQuantity = this.cart.items[cartItemIndex].quantity + 1;
-        updatedCartItems[cartItemIndex].quantity = newQuantity;
-    } else {
-        updatedCartItems.push({
-            itemId: item._id,
-            quantity: newQuantity,
-        });
-    }
+    updatedCartItems.push({
+        itemId: item._id,
+    })
     const updatedCart = {
         items: updatedCartItems,
     };

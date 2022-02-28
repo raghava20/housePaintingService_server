@@ -7,12 +7,8 @@ const itemSchema = new Schema({
         type: String,
         required: true
     },
-    imageUrl: {
-        type: String,
-        required: true
-    },
     price: {
-        type: Number,
+        type: String,
         required: true
     },
 }, { timestamps: true })
