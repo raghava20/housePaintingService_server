@@ -10,7 +10,6 @@ const CLIENT_URL = "http://localhost:8000"
 
 
 export const signupUser = async (req, res) => {
-    console.log("in")
     const errors = validationResult(req)
     try {
         if (!errors.isEmpty()) {
@@ -48,7 +47,6 @@ export const signupUser = async (req, res) => {
         }
         sgMail.send(msg).then(() => {
 
-            console.log("mail sent")
             return res.status(201).json({
                 message: "User Signed-up successfully, please verify your email before logging in",
                 userId: result._id
@@ -58,18 +56,14 @@ export const signupUser = async (req, res) => {
         })
     }
     catch (err) {
-        console.log(err)
         res.send({ message: err })
     }
 }
 
 export const verifyAccount = (req, res) => {
-    console.log("verify page")
     const token = req.params.token;
-    console.log(token)
     try {
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, data) => {
-            console.log("jwt")
             if (err) {
                 return res.send({ message: "Token expired!" })
             }

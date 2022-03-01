@@ -5,18 +5,14 @@ const Schema = mongoose.Schema;
 const orderSchema = new Schema({
     items: [{
         item: {
-            type: Object,
-            required: true
-        },
-        quantity: {
-            type: Number,
+            type: [String],
             required: true
         }
     }],
     status: {
         type: String,
         required: true,
-        enum: ["Placed,Cancelled,Accepted,Completed"]
+        enum: ["Booked", "Cancelled", "Accepted", "Completed"]
     },
     user: {
         name: {
@@ -35,6 +31,10 @@ const orderSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "User"
         }
+    },
+    date: {
+        type: Date,
+        default: Date.now()
     }
 })
 

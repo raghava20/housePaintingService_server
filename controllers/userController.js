@@ -4,6 +4,7 @@ import { Item } from "../models/item.js"
 import shortid from "shortid"
 import Razorpay from "razorpay"
 import dotenv from "dotenv"
+import { Order } from "../models/order.js"
 
 dotenv.config()
 
@@ -31,7 +32,6 @@ export const getCart = (req, res) => {
 // post item to the cart
 export const postCart = (req, res) => {
     const itemId = req.body.itemId;
-    console.log(itemId, "server")
     let targetItem;
     if (!itemId) {
         res.status(404).send({ message: "ItemId not provided" })
@@ -52,9 +52,7 @@ export const postCart = (req, res) => {
 
 // remove item from the cart
 export const postCartDelete = (req, res) => {
-    console.log(req.body)
     const itemId = req.body.itemId;
-    console.log(itemId, "server delte")
     if (!itemId) {
         return res.status(404).send({ message: "ItemId not provided" })
     }
@@ -86,27 +84,32 @@ export const postOrder = (req, res) => {
             return user.populate("cart.items.itemId")
         })
         .then(result => {
+            console.log(result.address, "address")
+            console.log(result.cart.items.itemId, "items")
+            console.log(result.cart.items, "items222")
+            console.log(result, "user")
             const order = new Order({
                 user: {
                     email: accountObj.email,
                     name: result.firstName,
                     address: result.address,
-                    userId: result
+                    userId: result._id
                 },
-                items: items,
-                status: "placed"
+                items: { ...result.cart.items },
+                status: "Booked"
             })
-            order.save()
-            return result;
+            // if (!order) return res.status(500).send({ message: "Order not found" })
+            console.log(order, "order")
+            const value = order.save()
+            console.log(value)
+            return value;
         })
         .then(result => {
-            return userObj.clearCart();
-        })
-        .then(result => {
-            res.status(200).json({ result })
+            userObj.clearCart();
+            return res.status(200).json({ result })
         })
         .catch(err => {
-            res.send({ message: err })
+            res.status(500).json({ message: err })
         })
 }
 
@@ -166,8 +169,7 @@ export const postRazorPay = async (req, res) => {
 
     try {
         const response = await razorpay.orders.create(options)
-        console.log(response)
-        res.json({
+        return res.status(200).send({
             id: response.id,
             currency: response.currency,
             amount: response.amount
@@ -176,3 +178,34 @@ export const postRazorPay = async (req, res) => {
         console.log(error)
     }
 }
+
+export const postAddress = (req, res) => {
+
+    const { aptName, locality, street, phoneNo, zipCode } = req.body;
+
+    Account.findById(req.user)
+        .then((account) => {
+            return User.findOne({ account: account._id });
+        })
+        .then((user) => {
+            return User.findByIdAndUpdate(
+                { _id: user._id },
+                {
+                    address: {
+                        street: street,
+                        locality: locality,
+                        zipCode: zipCode,
+                        phoneNo: phoneNo,
+                        aptName: aptName
+                    }
+                },
+                { new: true }
+            );
+        })
+        .then((result) => {
+            res.json({ item: result });
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: err.message });
+        });
+};
