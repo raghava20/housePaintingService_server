@@ -7,7 +7,7 @@ export const auth = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);      //verifying jwt by getting token from request header
-        req.user = decoded.accountId;                                        //assigning user containing user.id to req.user
+        req.user = decoded.accountId;                                        //assigning user containing user.accountId to req.user
         next()
     }
     catch (err) {

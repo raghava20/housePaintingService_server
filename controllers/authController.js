@@ -8,7 +8,7 @@ import { Account } from "../models/account.js"
 
 const CLIENT_URL = "http://localhost:8000"
 
-
+// signup the user 
 export const signupUser = async (req, res) => {
     const errors = validationResult(req)
     try {
@@ -60,6 +60,7 @@ export const signupUser = async (req, res) => {
     }
 }
 
+// verify the users email address
 export const verifyAccount = (req, res) => {
     const token = req.params.token;
     try {
@@ -92,7 +93,7 @@ export const verifyAccount = (req, res) => {
 
 }
 
-
+// login the user once the email has been verified
 export const loginUser = (req, res) => {
     const { email, password } = req.body;
     let loadedUser;

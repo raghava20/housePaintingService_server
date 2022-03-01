@@ -98,7 +98,6 @@ export const postOrder = (req, res) => {
                 items: { ...result.cart.items },
                 status: "Booked"
             })
-            // if (!order) return res.status(500).send({ message: "Order not found" })
             console.log(order, "order")
             const value = order.save()
             console.log(value)
@@ -113,6 +112,7 @@ export const postOrder = (req, res) => {
         })
 }
 
+// get all the order placed by the user
 export const getOrder = (req, res) => {
 
     Account.findById(req.user.id)
@@ -131,6 +131,7 @@ export const getOrder = (req, res) => {
         })
 }
 
+// get the loggedin user details
 export const getLoggedInUser = (req, res) => {
     const accountId = req.user
     let accountObj;
@@ -154,6 +155,7 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET
 })
 
+// setup for razorpay payment
 export const postRazorPay = async (req, res) => {
 
     const payment_capture = 1
@@ -179,6 +181,7 @@ export const postRazorPay = async (req, res) => {
     }
 }
 
+// adding address to the user detail
 export const postAddress = (req, res) => {
 
     const { aptName, locality, street, phoneNo, zipCode } = req.body;

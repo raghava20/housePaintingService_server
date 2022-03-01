@@ -7,9 +7,7 @@ const deliveryInfo = {
     locality: String,
     aptName: String,
     zip: String,
-    phoneNo: Number,
-    lat: Number,
-    lng: Number,
+    phoneNo: Number
 };
 
 const userSchema = new Schema({
