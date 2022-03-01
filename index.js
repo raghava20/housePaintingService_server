@@ -7,7 +7,7 @@ import { userRouter } from "./routes/user.js"
 
 dotenv.config()
 const app = express()
-let PORT = 8000 || process.env.PORT
+let PORT = process.env.PORT || 8000
 
 app.use(express.json())
 app.use(cors())
