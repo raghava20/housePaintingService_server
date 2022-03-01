@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken"
 import { User } from "../models/user.js"
 import { Account } from "../models/account.js"
 
-const CLIENT_URL = "http://localhost:8000"
+const CLIENT_URL = "https://house-painting-service.herokuapp.com"
 
 // signup the user 
 export const signupUser = async (req, res) => {
